@@ -1,39 +1,17 @@
 {
   "specs": [
     {
-      "title": "Spec-Up Example",
-      "spec_directory": "./single-file-test",
-      "output_path": "./",
+      "title": "did:cid Method (Technical Overview)",
+      "spec_directory": "./spec",
+      "output_path": "./docs",
       "logo": "logo.svg",
-      "logo_link": "https://github.com/decentralized-identity/spec-up",
+      "logo_link": "https://github.com/flaxscrip/didcid-presentation",
       "source": {
         "host": "github",
-        "account": "decentralized-identity",
-        "repo": "spec-up"
+        "account": "flaxscrip",
+        "repo": "didcid-presentation"
       },
-      "external_specs": [
-        {
-          "PE": "https://identity.foundation/presentation-exchange"
-        }
-      ],
-      "katex": true
-    },
-    {
-      "title": "Spec-Up Multi-File Example",
-      "spec_directory": "./multi-file-test",
-      "markdown_paths": [
-        "header.md",
-        "abstract.md",
-        "getting-started.md",
-        "features.md"
-      ],
-      "logo": "../logo.svg",
-      "logo_link": "https://github.com/decentralized-identity/spec-up",
-      "source": {
-        "host": "github",
-        "account": "decentralized-identity",
-        "repo": "spec-up"
-      }
+      "katex": false
     }
   ]
 }

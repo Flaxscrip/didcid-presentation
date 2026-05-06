@@ -1,0 +1,564 @@
+
+    <!DOCTYPE html>
+    <html lang="en" class="wa-theme-default">
+      <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+        <meta name="color-scheme" content="light dark">
+        
+
+        <title>did:cid Method (Technical Overview)</title>
+
+        <link rel="icon" href="logo.svg">
+
+        <script>(function(){"use strict";(function(){const r="spec-up-color-scheme",e=document.documentElement,o=window.matchMedia?window.matchMedia("(prefers-color-scheme: dark)"):null;let t="auto";try{const a=window.localStorage.getItem(r);(a==="light"||a==="dark"||a==="auto")&&(t=a)}catch{}const c=t==="auto"?o&&o.matches?"dark":"light":t;e.classList.remove("wa-light","wa-dark"),e.classList.add(c==="dark"?"wa-dark":"wa-light"),e.dataset.theme=c,e.dataset.themePreference=t,e.style.colorScheme=c})()})();</script><link href="assets/compiled/head.css" rel="stylesheet"/><script src="assets/compiled/head.js"></script>
+      </head>
+      <body features="logo source">
+        <svg id="svg" version="1.1" xmlns="http://www.w3.org/2000/svg">
+  <symbol id="svg-github" viewBox="0 0 20 20">
+    <path fill="currentColor" d="M10 0.247c-5.522 0-10 4.477-10 10 0 4.418 2.865 8.167 6.839 9.489 0.5 0.093 0.683-0.217 0.683-0.481 0-0.238-0.009-1.026-0.014-1.862-2.782 0.605-3.369-1.18-3.369-1.18-0.455-1.156-1.11-1.463-1.11-1.463-0.907-0.621 0.069-0.608 0.069-0.608 1.004 0.071 1.533 1.031 1.533 1.031 0.892 1.529 2.339 1.087 2.91 0.831 0.090-0.646 0.349-1.087 0.635-1.337-2.221-0.253-4.556-1.11-4.556-4.942 0-1.092 0.391-1.984 1.030-2.684-0.104-0.252-0.446-1.269 0.097-2.646 0 0 0.84-0.269 2.751 1.025 0.798-0.222 1.653-0.333 2.503-0.337 0.85 0.004 1.706 0.115 2.505 0.337 1.909-1.294 2.747-1.025 2.747-1.025 0.544 1.378 0.202 2.395 0.098 2.646 0.641 0.7 1.029 1.592 1.029 2.684 0 3.841-2.339 4.687-4.566 4.934 0.359 0.31 0.678 0.919 0.678 1.852 0 1.338-0.012 2.415-0.012 2.744 0 0.266 0.18 0.578 0.687 0.48 3.971-1.324 6.833-5.071 6.833-9.488 0-5.523-4.477-10-10-10z"></path>
+  </symbol>
+  <symbol id="spec-up-icon-github" viewBox="0 0 20 20">
+    <path fill="currentColor" d="M10 0.247c-5.522 0-10 4.477-10 10 0 4.418 2.865 8.167 6.839 9.489 0.5 0.093 0.683-0.217 0.683-0.481 0-0.238-0.009-1.026-0.014-1.862-2.782 0.605-3.369-1.18-3.369-1.18-0.455-1.156-1.11-1.463-1.11-1.463-0.907-0.621 0.069-0.608 0.069-0.608 1.004 0.071 1.533 1.031 1.533 1.031 0.892 1.529 2.339 1.087 2.91 0.831 0.090-0.646 0.349-1.087 0.635-1.337-2.221-0.253-4.556-1.11-4.556-4.942 0-1.092 0.391-1.984 1.030-2.684-0.104-0.252-0.446-1.269 0.097-2.646 0 0 0.84-0.269 2.751 1.025 0.798-0.222 1.653-0.333 2.503-0.337 0.85 0.004 1.706 0.115 2.505 0.337 1.909-1.294 2.747-1.025 2.747-1.025 0.544 1.378 0.202 2.395 0.098 2.646 0.641 0.7 1.029 1.592 1.029 2.684 0 3.841-2.339 4.687-4.566 4.934 0.359 0.31 0.678 0.919 0.678 1.852 0 1.338-0.012 2.415-0.012 2.744 0 0.266 0.18 0.578 0.687 0.48 3.971-1.324 6.833-5.071 6.833-9.488 0-5.523-4.477-10-10-10z"></path>
+  </symbol>
+  <symbol id="svg-nested-list" viewBox="0 0 37 32">
+    <path d="M0 2.286c0-1.262 1.023-2.286 2.286-2.286s2.286 1.023 2.286 2.286c0 1.262-1.023 2.286-2.286 2.286s-2.286-1.023-2.286-2.286zM9.143 0h27.429v4.571h-27.429zM9.143 11.429c0-1.262 1.023-2.286 2.286-2.286s2.286 1.023 2.286 2.286c0 1.262-1.023 2.286-2.286 2.286s-2.286-1.023-2.286-2.286zM18.286 9.143h18.286v4.571h-18.286zM9.143 29.714c0-1.262 1.023-2.286 2.286-2.286s2.286 1.023 2.286 2.286c0 1.262-1.023 2.286-2.286 2.286s-2.286-1.023-2.286-2.286zM18.286 27.429h18.286v4.571h-18.286zM18.286 20.571c0-1.262 1.023-2.286 2.286-2.286s2.286 1.023 2.286 2.286c0 1.262-1.023 2.286-2.286 2.286s-2.286-1.023-2.286-2.286zM27.429 18.286h9.143v4.571h-9.143z"></path>
+  </symbol>
+  <symbol id="spec-up-icon-bars" viewBox="0 0 24 24">
+    <rect x="3" y="5" width="18" height="2" rx="1" fill="currentColor"></rect>
+    <rect x="3" y="11" width="18" height="2" rx="1" fill="currentColor"></rect>
+    <rect x="3" y="17" width="18" height="2" rx="1" fill="currentColor"></rect>
+  </symbol>
+  <symbol id="spec-up-icon-search" viewBox="0 0 24 24">
+    <circle cx="11" cy="11" r="6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></circle>
+    <path d="M16 16l4.5 4.5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"></path>
+  </symbol>
+  <symbol id="spec-up-icon-sun" viewBox="0 0 24 24">
+    <circle cx="12" cy="12" r="4" fill="none" stroke="currentColor" stroke-width="2"></circle>
+    <path d="M12 2.5v2.5M12 19v2.5M4.5 12H2m20 0h-2.5M5.6 5.6l1.8 1.8M16.6 16.6l1.8 1.8M18.4 5.6l-1.8 1.8M7.4 16.6l-1.8 1.8" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"></path>
+  </symbol>
+  <symbol id="spec-up-icon-moon" viewBox="0 0 24 24">
+    <path d="M19.5 14.25A8.25 8.25 0 0 1 9.75 4.5a8.27 8.27 0 0 0 4.5 15.18 8.2 8.2 0 0 0 5.25-1.88z" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"></path>
+  </symbol>
+  <symbol id="spec-up-icon-circle-info" viewBox="0 0 24 24">
+    <circle cx="12" cy="12" r="9" fill="none" stroke="currentColor" stroke-width="2"></circle>
+    <circle cx="12" cy="8" r="1.25" fill="currentColor"></circle>
+    <path d="M12 11v5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"></path>
+  </symbol>
+  <symbol id="spec-up-icon-circle-exclamation" viewBox="0 0 24 24">
+    <circle cx="12" cy="12" r="9" fill="none" stroke="currentColor" stroke-width="2"></circle>
+    <path d="M12 7v6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"></path>
+    <circle cx="12" cy="17" r="1.25" fill="currentColor"></circle>
+  </symbol>
+  <symbol id="spec-up-icon-triangle-exclamation" viewBox="0 0 24 24">
+    <path d="M12 3.5l9 16a1 1 0 0 1-.87 1.5H3.87A1 1 0 0 1 3 19.5l9-16z" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"></path>
+    <path d="M12 9v5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"></path>
+    <circle cx="12" cy="17.25" r="1.1" fill="currentColor"></circle>
+  </symbol>
+  <symbol id="spec-up-icon-circle-check" viewBox="0 0 24 24">
+    <circle cx="12" cy="12" r="9" fill="none" stroke="currentColor" stroke-width="2"></circle>
+    <path d="M8 12.5l2.5 2.5 5.5-6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
+  </symbol>
+</svg>
+
+
+        <wa-page class="spec-up-shell" mobile-breakpoint="1080" disable-navigation-toggle>
+          <span slot="skip-to-content">Skip to specification content</span>
+
+          <header slot="header" id="app_header">
+            <div class="spec-up-brand">
+              <wa-button data-toggle-nav size="small" appearance="plain" variant="neutral" class="spec-up-nav-toggle" aria-label="Open table of contents">
+                <wa-icon library="spec-up" name="bars"></wa-icon>
+              </wa-button>
+              <a class="spec-up-brand-mark spec-up-brand-mark--logo" href="https://github.com/flaxscrip/didcid-presentation"><img src="logo.svg" alt="did:cid Method (Technical Overview) logo"/></a>
+              <div class="spec-up-brand-copy">
+                <strong>did:cid Method (Technical Overview)</strong>
+              </div>
+            </div>
+            
+      <div class="spec-up-header-actions">
+        <wa-dropdown id="spec_up_theme_selector" class="spec-up-theme-selector color-scheme-selector" size="small" placement="bottom-start">
+          <wa-button
+            slot="trigger"
+            id="color-scheme-selector-trigger"
+            class="spec-up-theme-selector__trigger"
+            appearance="plain"
+            aria-label="Color theme"
+            variant="neutral"
+            size="small"
+          >
+            <wa-icon library="spec-up" name="sun" class="icon-embiggen only-light" aria-hidden="true"></wa-icon>
+            <wa-icon library="spec-up" name="moon" class="icon-embiggen only-dark" aria-hidden="true"></wa-icon>
+          </wa-button>
+          <wa-dropdown-item value="light">
+            <wa-icon library="spec-up" slot="icon" name="sun" class="icon-embiggen" aria-hidden="true"></wa-icon>
+            Light
+          </wa-dropdown-item>
+          <wa-dropdown-item value="dark">
+            <wa-icon library="spec-up" slot="icon" name="moon" class="icon-embiggen" aria-hidden="true"></wa-icon>
+            Dark
+          </wa-dropdown-item>
+          <wa-divider></wa-divider>
+          <wa-dropdown-item value="auto">
+            <wa-icon library="spec-up" slot="icon" name="sun" class="only-light icon-embiggen" aria-hidden="true"></wa-icon>
+            <wa-icon library="spec-up" slot="icon" name="moon" class="only-dark icon-embiggen" aria-hidden="true"></wa-icon>
+            System
+          </wa-dropdown-item>
+        </wa-dropdown>
+        
+        <wa-button class="spec-up-issues-trigger" size="small" appearance="outlined" variant="neutral" data-drawer="open repo_issues_drawer">
+          <wa-icon library="spec-up" name="github"></wa-icon>
+          Issues
+        </wa-button>
+    
+      </div>
+  
+          </header>
+
+          <div slot="navigation-header" class="spec-up-navigation-title">
+            <strong>did:cid Method (Technical Overview)</strong>
+          </div>
+
+          <nav id="toc" slot="navigation" aria-label="Table of contents">
+            <ul class="toc"><li><a href="#abstract">Abstract</a></li><li><a href="#status">Status</a></li><li><a href="#terminology">Terminology</a></li><li><a href="#didcid-method-syntax">did:cid Method Syntax</a></li><li><a href="#subject-types">Subject Types</a></li><li><a href="#operations">Operations</a><ul><li><a href="#create">Create</a></li><li><a href="#update">Update</a></li><li><a href="#delete">Delete</a></li></ul></li><li><a href="#resolution-algorithm">Resolution Algorithm</a><ul><li><a href="#resolution-time-options">Resolution-Time Options</a></li></ul></li><li><a href="#temporal-proof-verification">Temporal Proof Verification</a></li><li><a href="#registries">Registries</a></li><li><a href="#reference-architecture">Reference Architecture</a></li><li><a href="#security-considerations">Security Considerations</a></li><li><a href="#privacy-considerations">Privacy Considerations</a></li><li><a href="#implementations">Implementations</a></li><li><a href="#references">References</a></li></ul>
+          </nav>
+
+          <main class="spec-up-main">
+            <article id="content">
+              <h1 id="didcid-method-technical-overview"><span class="spec-up-heading-text">did:cid Method (Technical Overview)</span><a class="toc-anchor" href="#didcid-method-technical-overview">§</a></h1>
+<p><strong>Specification Status:</strong> <wa-badge variant="brand">Draft</wa-badge></p>
+<p><strong>Latest Draft:</strong>
+<a path-0="flaxscrip.github.io" path-1="didcid-presentation" path-2="" href="https://flaxscrip.github.io/didcid-presentation/">https://flaxscrip.github.io/didcid-presentation/</a></p>
+<dl>
+<dt>Editors:</dt>
+<dd><a path-0="github.com" path-1="flaxscrip" href="https://github.com/flaxscrip">Christian Saucier</a> (Archetech)</dd>
+<dd><a path-0="github.com" path-1="macterra" href="https://github.com/macterra">David McFadzean</a> (Archetech)</dd>
+<dt>Participate:</dt>
+<dd><a path-0="github.com" path-1="flaxscrip" path-2="didcid-presentation" href="https://github.com/flaxscrip/didcid-presentation">GitHub repo</a></dd>
+<dd><a path-0="github.com" path-1="flaxscrip" path-2="didcid-presentation" path-3="issues" href="https://github.com/flaxscrip/didcid-presentation/issues">File an issue</a></dd>
+<dd><a path-0="github.com" path-1="flaxscrip" path-2="didcid-presentation" path-3="commits" path-4="main" href="https://github.com/flaxscrip/didcid-presentation/commits/main">Commit history</a></dd>
+</dl>
+<hr>
+<h2 id="abstract"><span class="spec-up-heading-text">Abstract</span><a class="toc-anchor" href="#abstract">§</a></h2>
+<p><code>did:cid</code> is a DID method that separates identity creation from identity
+mutation. A DID is created instantly and at no network cost by deriving its
+suffix from the <a class="term-reference" href="#term:cid">CID</a> of a canonicalized create operation pinned to
+<a path-0="docs.ipfs.tech" path-1="concepts" path-2="content-addressing" path-3="" href="https://docs.ipfs.tech/concepts/content-addressing/">IPFS</a>. Subsequent
+updates and revocations are signed operations whose ordering and finality are
+provided by a <a class="term-reference" href="#term:registry">Registry</a> selected by the DID controller at creation
+time, ranging from local-only stores to peer-to-peer gossip networks to
+Bitcoin-anchored ledgers. Resolution reconstructs the current or any
+historical state of a DID document by combining the immutable IPFS seed with
+valid registry events.</p>
+<p>This document is a technical overview of the method intended to accompany the
+DIF DID Methods Working Group proposal. It is not a normative specification.
+The normative protocol specification is maintained in the
+<a path-0="github.com" path-1="archetech" path-2="archon" href="https://github.com/archetech/archon">Archon repository</a> under
+<a path-0="github.com" path-1="archetech" path-2="archon" path-3="blob" path-4="main" path-5="docs" path-6="scheme.md" href="https://github.com/archetech/archon/blob/main/docs/scheme.md"><code>docs/scheme.md</code></a>.</p>
+<h2 id="status"><span class="spec-up-heading-text">Status</span><a class="toc-anchor" href="#status">§</a></h2>
+<p>This overview was prepared for the DIF DID Methods Working Group meeting on
+2026-05-06 and accompanies the <a path-0="github.com" path-1="decentralized-identity" path-2="did-methods" path-3="blob" path-4="main" path-5="method-proposals" path-6="PROPOSAL-did-cid.md" href="https://github.com/decentralized-identity/did-methods/blob/main/method-proposals/PROPOSAL-did-cid.md"><code>did:cid</code> method
+proposal</a>
+in the <code>decentralized-identity/did-methods</code> repository.</p>
+<p>The protocol is implemented and in active use within the <a path-0="github.com" path-1="archetech" path-2="archon" href="https://github.com/archetech/archon">Archon
+project</a>. Reference implementations
+exist in TypeScript, Python, and Rust. See
+<a href="#implementations">Implementations</a>.</p>
+<h2 id="terminology"><span class="spec-up-heading-text">Terminology</span><a class="toc-anchor" href="#terminology">§</a></h2>
+<dl>
+<dt><span id="term:cid">CID</span>:</dt>
+<dd>Content Identifier as defined by the
+<a path-0="github.com" path-1="multiformats" path-2="cid" href="https://github.com/multiformats/cid">IPFS CID specification</a>. In <code>did:cid</code>,
+the CIDv1 of a canonicalized create operation forms the DID suffix.</dd>
+<dt><span id="term:did">DID</span>:</dt>
+<dd>Decentralized Identifier following the <a path-0="www.w3.org" path-1="TR" path-2="did-core" path-3="" href="https://www.w3.org/TR/did-core/">W3C DID Core</a>
+syntax.</dd>
+<dt><span id="term:did-document">DID Document</span>:</dt>
+<dd>The resolved document containing verification methods, controllers,
+services, document data, and method-specific metadata.</dd>
+<dt><span id="term:create-operation">Create Operation</span>:</dt>
+<dd>The canonicalized seed object whose <a class="term-reference" href="#term:cid">CID</a> forms the DID. For agent
+DIDs the seed contains a <code>publicJwk</code> and a self-proof; for asset DIDs it
+contains a <code>controller</code> reference and a controller-signed proof.</dd>
+<dt><span id="term:update-operation">Update Operation</span>:</dt>
+<dd>A signed mutation referencing the previous accepted operation through
+<code>previd</code>.</dd>
+<dt><span id="term:delete-operation">Delete Operation</span>:</dt>
+<dd>A signed terminal operation that deactivates the <a class="term-reference" href="#term:did">DID</a>. Deletion
+is final.</dd>
+<dt><span id="term:registry">Registry</span>:</dt>
+<dd>A network or ledger that orders <a class="term-reference" href="#term:update-operation">Update Operation</a> and
+<a class="term-reference" href="#term:delete-operation">Delete Operation</a> events for a <a class="term-reference" href="#term:did">DID</a>. Each DID binds itself
+to a registry at creation time.</dd>
+<dt><span id="term:gatekeeper">Gatekeeper</span>:</dt>
+<dd>The Archon protocol enforcement service responsible for validating
+operations, persisting events, and resolving <a class="term-reference" href="#term:did-document">DID Document</a> state.</dd>
+<dt><span id="term:keymaster">Keymaster</span>:</dt>
+<dd>The Archon wallet/key service that holds private keys and signs
+<a class="term-reference" href="#term:create-operation">Create Operation</a>, <a class="term-reference" href="#term:update-operation">Update Operation</a>, and
+<a class="term-reference" href="#term:delete-operation">Delete Operation</a> payloads.</dd>
+<dt><span id="term:mediator">Mediator</span>:</dt>
+<dd>A pluggable component that moves operations between <a class="term-reference" href="#term:gatekeeper">Gatekeeper</a>
+instances and a specific registry (for example, Hyperswarm peers or a
+Bitcoin node).</dd>
+</dl>
+<h2 id="didcid-method-syntax"><span class="spec-up-heading-text">did:cid Method Syntax</span><a class="toc-anchor" href="#didcid-method-syntax">§</a></h2>
+<p>The DID syntax follows <a path-0="www.w3.org" path-1="TR" path-2="did-core" path-3="#did-syntax" href="https://www.w3.org/TR/did-core/#did-syntax">DID Core</a>.</p>
+<div class="spec-up-code-block-wrapper"><pre class="language-text spec-up-code-block"><code class="language-text" id="spec-up-code-copy-target-1">did:cid:&lt;cid&gt;[;service][/path][?query][#fragment]
+</code></pre><wa-copy-button class="spec-up-code-copy-button" from="spec-up-code-copy-target-1" copy-label="Copy" success-label="Copied" error-label="Copy failed"></wa-copy-button></div>
+<p>Example:</p>
+<div class="spec-up-code-block-wrapper"><pre class="language-text spec-up-code-block"><code class="language-text" id="spec-up-code-copy-target-2">did:cid:bagaaieratxbzo7e4dqup37h7j6hs7kzpamevy4qud4psj23p3r3grzd2rjca
+</code></pre><wa-copy-button class="spec-up-code-copy-button" from="spec-up-code-copy-target-2" copy-label="Copy" success-label="Copied" error-label="Copy failed"></wa-copy-button></div>
+<p>Properties:</p>
+<ul>
+<li>The method-name is <code>cid</code>.</li>
+<li>The method-specific identifier is a <a path-0="github.com" path-1="multiformats" path-2="cid" href="https://github.com/multiformats/cid">CIDv1</a>
+using <code>base32</code> lower-case encoding.</li>
+<li>The CID is computed over the canonicalized JSON of the
+<a class="term-reference" href="#term:create-operation">Create Operation</a>. The DID is therefore self-certifying with
+respect to the create operation: the identifier itself commits to the
+bytes of the operation that produced it.</li>
+<li>DID URL components (<code>/path</code>, <code>?query</code>, <code>#fragment</code>) follow DID Core
+syntax.</li>
+</ul>
+<h2 id="subject-types"><span class="spec-up-heading-text">Subject Types</span><a class="toc-anchor" href="#subject-types">§</a></h2>
+<p><code>did:cid</code> distinguishes two subject types:</p>
+<table>
+<thead>
+<tr>
+<th>Type</th>
+<th>Has its own keys?</th>
+<th>Controlled by</th>
+<th>Typical uses</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Agent</td>
+<td>Yes</td>
+<td>Holder of its private key</td>
+<td>Users, services, issuers, verifiers, Archon nodes</td>
+</tr>
+<tr>
+<td>Asset</td>
+<td>No</td>
+<td>A controller agent DID</td>
+<td>Verifiable Credentials, schemas, vault metadata, group definitions, files</td>
+</tr>
+</tbody>
+</table>
+<p>Not every identifier needs to sign. Modeling assets as DIDs makes
+credentials, schemas, and other content first-class identity-layer objects
+that are addressable, resolvable, and controllable, without forcing each one
+to carry its own key material.</p>
+<h2 id="operations"><span class="spec-up-heading-text">Operations</span><a class="toc-anchor" href="#operations">§</a></h2>
+<p>Every operation is canonicalized JSON, signed by an appropriate key, and
+processed through the <a class="term-reference" href="#term:gatekeeper">Gatekeeper</a> import pipeline before it can
+affect a DID’s state.</p>
+<h3 id="create"><span class="spec-up-heading-text">Create</span><a class="toc-anchor" href="#create">§</a></h3>
+<p>A create operation contains, at minimum:</p>
+<ul>
+<li><code>type: "create"</code></li>
+<li><code>registration.version</code></li>
+<li><code>registration.type</code> — <code>"agent"</code> or <code>"asset"</code></li>
+<li><code>registration.registry</code> — for example <code>local</code>, <code>hyperswarm</code>, <code>BTC:signet</code>,
+<code>BTC:mainnet</code></li>
+<li>For agents: a <code>publicJwk</code> (secp256k1) and a self-proof signed by the
+corresponding private key.</li>
+<li>For assets: a <code>controller</code> <a class="term-reference" href="#term:did">DID</a>, a non-empty <code>data</code> object, and a
+proof signed by the controller’s key.</li>
+<li><code>created</code> — RFC 3339 timestamp.</li>
+<li><code>proof</code> — over the canonicalized operation bytes.</li>
+</ul>
+<p><a class="term-reference" href="#term:gatekeeper">Gatekeeper</a> verifies the proof, canonicalizes the JSON, pins the
+seed via IPFS, and returns <code>did:cid:&lt;cid&gt;</code>. For agent creates the proof’s
+<code>verificationMethod</code> uses the relative reference <code>#key-1</code>, because the DID
+does not exist until after the <a class="term-reference" href="#term:cid">CID</a> is computed.</p>
+<h3 id="update"><span class="spec-up-heading-text">Update</span><a class="toc-anchor" href="#update">§</a></h3>
+<p>An update operation contains:</p>
+<ul>
+<li><code>type: "update"</code></li>
+<li><code>did</code></li>
+<li><code>doc</code> — the changed document fields (merged on top of the current state)</li>
+<li><code>previd</code> — the operation id of the previous accepted event (typically the
+current chain tip)</li>
+<li><code>blockid</code> — optional, for blockchain-anchored registries</li>
+<li><code>proof</code> — by the current controller key</li>
+</ul>
+<p><a class="term-reference" href="#term:gatekeeper">Gatekeeper</a> checks that the proof is valid for the current
+controller, that <code>previd</code> is consistent with the stored chain, and that the
+resulting <a class="term-reference" href="#term:did-document">DID Document</a> is well-formed. The accepted event is then
+sequenced according to the DID’s registry.</p>
+<h3 id="delete"><span class="spec-up-heading-text">Delete</span><a class="toc-anchor" href="#delete">§</a></h3>
+<p>Delete is a terminal update:</p>
+<ul>
+<li><code>type: "delete"</code></li>
+<li><code>did</code></li>
+<li><code>previd</code></li>
+<li><code>proof</code> by the controller</li>
+</ul>
+<p>After a delete is accepted, resolution returns metadata with
+<code>deactivated: true</code>, clears <code>didDocumentData</code>, and forbids future updates.
+Recovery, if needed, must be implemented at the key-management layer rather
+than re-activated at the protocol layer.</p>
+<wa-callout id="note-1" class="spec-up-notice spec-up-notice--note" variant="brand" appearance="filled-outlined"><wa-icon library="spec-up" slot="icon" name="circle-info" label="note"></wa-icon><div class="spec-up-notice-heading"><a class="notice-link" href="#note-1">NOTE</a></div><p><code>previd</code> ties each non-create operation to a parent. The
+<a class="term-reference" href="#term:registry">Registry</a> provides ordering and confirmation. Together they make
+replay and fork handling explicit and verifiable.</p>
+</wa-callout>
+<h2 id="resolution-algorithm"><span class="spec-up-heading-text">Resolution Algorithm</span><a class="toc-anchor" href="#resolution-algorithm">§</a></h2>
+<p>Resolution reconstructs DID document state deterministically from an IPFS
+seed plus the registry-confirmed event chain. It is not a database lookup
+of a “latest” blob. Resolvers can therefore answer “what is true now?” and
+“what was true at time <code>t</code>?” with the same algorithm.</p>
+<div class="spec-up-code-block-wrapper"><pre class="language-text spec-up-code-block"><code class="language-text" id="spec-up-code-copy-target-3">resolve(did, versionTime = now):
+  cid       = suffix(did)
+  seed      = ipfs.get(cid)
+  registry  = seed.registration.registry
+  events    = registry_events_for(did, registry)
+  doc       = document_from_seed(seed)
+
+  for event in chronological(events):
+    if event.time &gt; versionTime:
+      break
+    if valid_proof(event, doc) and valid_previd(event, doc):
+      doc = apply(event, doc)
+
+  return doc
+</code></pre><wa-copy-button class="spec-up-code-copy-button" from="spec-up-code-copy-target-3" copy-label="Copy" success-label="Copied" error-label="Copy failed"></wa-copy-button></div>
+<p>The companion infographic below traces a single operation through the
+<a class="term-reference" href="#term:gatekeeper">Gatekeeper</a> import pipeline (left) and shows how resolution replays
+the accepted chain (right). The visual emphasis is intentional: the
+expensive validation work happens at <em>import</em> time. Resolution simply
+replays the accepted event log.</p>
+<p><img src="assets/gatekeeper-resolution-infographic.png" alt="Gatekeeper operation import and DID resolution infographic"></p>
+<wa-callout id="import-validates-the-log.-resolution-replays-the-log." class="spec-up-notice spec-up-notice--note" variant="brand" appearance="filled-outlined"><wa-icon library="spec-up" slot="icon" name="circle-info" label="note"></wa-icon><div class="spec-up-notice-heading"><a class="notice-link" href="#import-validates-the-log.-resolution-replays-the-log.">NOTE</a></div><ul>
+<li>Most cryptographic and controller checks happen at import time.</li>
+<li>Duplicate gossip is merged, not applied twice.</li>
+<li>Registry-confirmed events can replace earlier unconfirmed versions.</li>
+<li><code>versionTime</code> and <code>versionSequence</code> stop replay at a historical point.</li>
+<li><code>verify=true</code> re-checks signatures during resolution.</li>
+<li>Delete is terminal and returns <code>deactivated: true</code>.</li>
+</ul>
+</wa-callout>
+<h3 id="resolution-time-options"><span class="spec-up-heading-text">Resolution-Time Options</span><a class="toc-anchor" href="#resolution-time-options">§</a></h3>
+<p>The resolver accepts a small number of replay-control options:</p>
+<ul>
+<li><code>versionTime</code> / <code>versionSequence</code> — stop replay at a historical point.</li>
+<li><code>confirm=true</code> — stop before unconfirmed events when only the
+registry-confirmed chain is wanted.</li>
+<li><code>verify=true</code> — re-check signatures and <code>previd</code> linkages while
+replaying.</li>
+</ul>
+<h2 id="temporal-proof-verification"><span class="spec-up-heading-text">Temporal Proof Verification</span><a class="toc-anchor" href="#temporal-proof-verification">§</a></h2>
+<p>Verification of any signed object whose signer is a <code>did:cid</code> MUST resolve
+the signer at the proof’s time, not at the verifier’s current time:</p>
+<div class="spec-up-code-block-wrapper"><pre class="language-text spec-up-code-block"><code class="language-text" id="spec-up-code-copy-target-4">verifyProof(object):
+  signerDid  = proof.verificationMethod.did
+  signerDoc  = resolve(signerDid, versionTime = proof.created)
+  publicKey  = signerDoc.verificationMethod[keyId]
+  verify signature with publicKey
+</code></pre><wa-copy-button class="spec-up-code-copy-button" from="spec-up-code-copy-target-4" copy-label="Copy" success-label="Copied" error-label="Copy failed"></wa-copy-button></div>
+<p>Why it matters:</p>
+<ul>
+<li>Key rotation does not invalidate previously issued credentials, because
+verification uses the historical key state.</li>
+<li>A signature made before a key compromise can still verify against the
+uncompromised historical key.</li>
+<li>A signature that claims a key state which never existed is rejected,
+because the resolved historical document will not contain that key.</li>
+</ul>
+<p>This is the security property that makes <code>did:cid</code> practical for
+long-lived <a path-0="www.w3.org" path-1="TR" path-2="vc-data-model-2.0" path-3="" href="https://www.w3.org/TR/vc-data-model-2.0/">Verifiable Credentials</a>.</p>
+<h2 id="registries"><span class="spec-up-heading-text">Registries</span><a class="toc-anchor" href="#registries">§</a></h2>
+<p>A <code>did:cid</code> does not pay a single fixed cost for all updates. The DID
+controller selects a registry at creation time, trading latency, finality,
+and cost:</p>
+<table>
+<thead>
+<tr>
+<th>Registry</th>
+<th>Strength</th>
+<th>Latency</th>
+<th>Cost</th>
+<th>Best fit</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>local</code></td>
+<td>Local-only</td>
+<td>Immediate</td>
+<td>Free</td>
+<td>Development, isolated testing</td>
+</tr>
+<tr>
+<td><code>hyperswarm</code></td>
+<td>Peer-distributed eventual consistency</td>
+<td>Seconds</td>
+<td>Free</td>
+<td>Fast P2P environments</td>
+</tr>
+<tr>
+<td><code>BTC:signet</code> / <code>BTC:testnet4</code></td>
+<td>Blockchain-style ordering on test networks</td>
+<td>Block cadence</td>
+<td>Test funds</td>
+<td>Staging and protocol tests</td>
+</tr>
+<tr>
+<td><code>BTC:mainnet</code></td>
+<td>Bitcoin-anchored ordering and timestamping</td>
+<td>Block cadence</td>
+<td>Batch fee</td>
+<td>High-value, long-lived updates</td>
+</tr>
+</tbody>
+</table>
+<p>Different DIDs may sit on different registries. A short-lived staging
+identity might use <code>hyperswarm</code>; a registry of long-lived organizational
+keys might anchor every update to Bitcoin mainnet.</p>
+<h2 id="reference-architecture"><span class="spec-up-heading-text">Reference Architecture</span><a class="toc-anchor" href="#reference-architecture">§</a></h2>
+<p>The Archon protocol is the reference implementation of <code>did:cid</code>. The
+relevant components are:</p>
+<ul>
+<li><strong><a class="term-reference" href="#term:gatekeeper">Gatekeeper</a></strong> — validates operations, stores DID events, and
+resolves <a class="term-reference" href="#term:did">DID</a>s. Proxies IPFS for seed retrieval. The protocol
+enforcement point.</li>
+<li><strong><a class="term-reference" href="#term:keymaster">Keymaster</a></strong> — manages wallet keys and signs operations. The
+private-key boundary; private keys never leave Keymaster.</li>
+<li><strong><a class="term-reference" href="#term:mediator">Mediator</a>s</strong> — registry-specific networking modules that move
+operations between Gatekeeper and the chosen registry (Hyperswarm peers,
+Bitcoin nodes, etc.).</li>
+<li><strong>IPFS</strong> — content-addressed storage of the create-operation seed and
+any other large payloads.</li>
+<li><strong>Client apps and CLIs</strong> — expose wallet, identity, credential, and
+admin workflows on top of Gatekeeper and Keymaster.</li>
+</ul>
+<p>This separation is deliberate: IPFS provides content integrity and
+retrieval; the registry provides update ordering and finality; the
+controller’s signature provides authorization. Each responsibility is
+assigned to a mechanism with the right properties for that job.</p>
+<h2 id="security-considerations"><span class="spec-up-heading-text">Security Considerations</span><a class="toc-anchor" href="#security-considerations">§</a></h2>
+<ul>
+<li><strong>Canonical JSON.</strong> <a class="term-reference" href="#term:cid">CID</a> computation and signature verification
+both operate on canonicalized operation bytes. Any non-deterministic
+serialization breaks both identity creation and proof verification.</li>
+<li><strong>Controller authorization.</strong> Every operation is authorized by a
+controller key resolved as of the operation’s <code>proof.created</code> time.
+Update/delete operations on a deactivated <a class="term-reference" href="#term:did">DID</a> MUST be rejected.</li>
+<li><strong><code>previd</code> continuity.</strong> Each non-create operation references its parent
+via <code>previd</code>. Replay, fork, and reorg cases are made explicit and
+reduceable to a single-chain decision at import time.</li>
+<li><strong>Registry trust assumptions.</strong> Choosing <code>local</code> or <code>hyperswarm</code> accepts
+weaker finality than <code>BTC:mainnet</code>. Verifiers SHOULD inspect the
+registry of any DID whose updates are security-sensitive and apply
+appropriate confirmation thresholds.</li>
+<li><strong>Historical resolution.</strong> Verifiers MUST resolve signers at
+<code>proof.created</code>. Verifying against the latest document state would cause
+legitimate pre-rotation signatures to fail and would accept signatures
+that depend on key states that did not exist at sign time.</li>
+<li><strong>Delete is terminal.</strong> Recovery from key compromise must be designed
+into key management (e.g. backup, threshold signing) before a delete is
+issued.</li>
+</ul>
+<h2 id="privacy-considerations"><span class="spec-up-heading-text">Privacy Considerations</span><a class="toc-anchor" href="#privacy-considerations">§</a></h2>
+<ul>
+<li><strong>Public seeds.</strong> Create operations are published to IPFS and are
+effectively public. Implementations SHOULD avoid placing personal data
+in the seed; assets that contain personal data should be encrypted, with
+decryption keys distributed out of band or via Verifiable Credentials.</li>
+<li><strong>Registry observability.</strong> Updates anchored to a public registry are
+publicly observable. The frequency, timing, and target <a class="term-reference" href="#term:did">DID</a> of
+updates can leak metadata even when payloads are minimal.</li>
+<li><strong>Correlation across assets.</strong> Asset DIDs share a controller field that
+reveals the controlling agent. When unlinkability matters, controllers
+should issue distinct agent DIDs per audience or use selective disclosure
+techniques at the credential layer rather than at the DID layer.</li>
+<li><strong>No bot-detection bypass.</strong> Resolvers and clients that operate on
+behalf of a user should not be used to bypass CAPTCHAs or other
+human-verification systems on behalf of <code>did:cid</code> controllers.</li>
+</ul>
+<h2 id="implementations"><span class="spec-up-heading-text">Implementations</span><a class="toc-anchor" href="#implementations">§</a></h2>
+<table>
+<thead>
+<tr>
+<th>Implementation</th>
+<th>Language</th>
+<th>Status</th>
+<th>References</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Reference Keymaster</td>
+<td>TypeScript</td>
+<td>Production</td>
+<td><a path-0="www.npmjs.com" path-1="package" path-2="@didcid" path-3="keymaster" href="https://www.npmjs.com/package/@didcid/keymaster"><code>@didcid/keymaster</code></a> and the broader <code>@didcid/*</code> family of packages.</td>
+</tr>
+<tr>
+<td>Native Keymaster</td>
+<td>Python</td>
+<td>In review</td>
+<td><a path-0="github.com" path-1="archetech" path-2="archon" path-3="pull" path-4="455" href="https://github.com/archetech/archon/pull/455">archetech/archon#455</a>, <a path-0="github.com" path-1="archetech" path-2="archon" path-3="pull" path-4="480" href="https://github.com/archetech/archon/pull/480">#480</a>, <a path-0="github.com" path-1="archetech" path-2="archon" path-3="pull" path-4="483" href="https://github.com/archetech/archon/pull/483">#483</a></td>
+</tr>
+<tr>
+<td>Native Gatekeeper</td>
+<td>Rust</td>
+<td>In review</td>
+<td><a path-0="github.com" path-1="archetech" path-2="archon" path-3="pull" path-4="404" href="https://github.com/archetech/archon/pull/404">archetech/archon#404</a>, <a path-0="github.com" path-1="archetech" path-2="archon" path-3="pull" path-4="425" href="https://github.com/archetech/archon/pull/425">#425</a></td>
+</tr>
+</tbody>
+</table>
+<p>The TypeScript stack is the canonical implementation that ships in current
+Archon nodes. The Python and Rust implementations target operator-friendly
+deployment profiles (Python for AI-agent integrations, Rust for
+performance-sensitive node operators) and are tracked by the PRs above.</p>
+<h2 id="references"><span class="spec-up-heading-text">References</span><a class="toc-anchor" href="#references">§</a></h2>
+<ul>
+<li><a path-0="www.w3.org" path-1="TR" path-2="did-core" path-3="" href="https://www.w3.org/TR/did-core/">DID Core 1.0 (W3C Recommendation)</a></li>
+<li><a path-0="w3c-ccg.github.io" path-1="did-resolution" path-2="" href="https://w3c-ccg.github.io/did-resolution/">DID Resolution v0.3 (W3C CCG)</a></li>
+<li><a path-0="www.w3.org" path-1="TR" path-2="vc-data-model-2.0" path-3="" href="https://www.w3.org/TR/vc-data-model-2.0/">Verifiable Credentials Data Model v2.0</a></li>
+<li><a path-0="www.rfc-editor.org" path-1="rfc" path-2="rfc7516" href="https://www.rfc-editor.org/rfc/rfc7516">JSON Web Encryption (RFC 7516)</a></li>
+<li><a path-0="github.com" path-1="multiformats" path-2="cid" href="https://github.com/multiformats/cid">IPFS CID specification</a></li>
+<li><a path-0="github.com" path-1="archetech" path-2="archon" href="https://github.com/archetech/archon">Archon protocol repository</a> — see
+<a path-0="github.com" path-1="archetech" path-2="archon" path-3="blob" path-4="main" path-5="docs" path-6="scheme.md" href="https://github.com/archetech/archon/blob/main/docs/scheme.md"><code>docs/scheme.md</code></a>
+for the normative method specification.</li>
+<li><a path-0="github.com" path-1="decentralized-identity" path-2="did-methods" path-3="blob" path-4="main" path-5="method-proposals" path-6="PROPOSAL-did-cid.md" href="https://github.com/decentralized-identity/did-methods/blob/main/method-proposals/PROPOSAL-did-cid.md">DIF <code>did:cid</code> method proposal</a></li>
+<li><a path-0="github.com" path-1="archetech" path-2="archon" path-3="blob" path-4="main" path-5="docs" path-6="presentations" path-7="did-cid-technical-presentation.md" href="https://github.com/archetech/archon/blob/main/docs/presentations/did-cid-technical-presentation.md">Source presentation (Archon)</a></li>
+</ul>
+
+            </article>
+          </main>
+        </wa-page>
+
+        
+      <wa-drawer id="repo_issues_drawer" class="spec-up-issues-drawer" label="GitHub Issues" placement="end" light-dismiss>
+        <div class="spec-up-issues-search-row">
+          <wa-input id="repo_issue_search" type="search" placeholder="Search open issues" autocomplete="off" spellcheck="false" size="small">
+            <wa-icon library="spec-up" slot="start" name="search" label="Search GitHub issues"></wa-icon>
+            <span slot="end" class="spec-up-issues-search-end">
+              <span id="repo_issue_search_spinner" class="spec-up-issues-search-spinner" hidden aria-hidden="true">
+                <wa-spinner></wa-spinner>
+              </span>
+              <button id="repo_issue_search_clear" type="button" aria-label="Clear issue search" disabled>Clear</button>
+            </span>
+          </wa-input>
+        </div>
+        <div id="repo_issue_panel" class="spec-up-issues-panel">
+          <p id="repo_issue_status">Loading open GitHub issues…</p>
+          <ul id="repo_issue_list" class="spec-up-issue-list"></ul>
+          <div id="repo_issue_load_more" class="spec-up-issues-loading" hidden>
+            <wa-spinner></wa-spinner>
+            <span>Loading more issues…</span>
+          </div>
+        </div>
+      </wa-drawer>
+    
+
+        
+        <template id="spec_up_config">{&quot;title&quot;:&quot;did:cid Method (Technical Overview)&quot;,&quot;spec_directory&quot;:&quot;./spec&quot;,&quot;output_path&quot;:&quot;./docs&quot;,&quot;logo&quot;:&quot;logo.svg&quot;,&quot;logo_link&quot;:&quot;https://github.com/flaxscrip/didcid-presentation&quot;,&quot;source&quot;:{&quot;host&quot;:&quot;github&quot;,&quot;account&quot;:&quot;flaxscrip&quot;,&quot;repo&quot;:&quot;didcid-presentation&quot;},&quot;katex&quot;:false}</template>
+        <script src="assets/compiled/body.js"></script>
+      </body>
+    </html>
+  
