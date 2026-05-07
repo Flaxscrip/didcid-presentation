@@ -359,14 +359,9 @@ assigned to a mechanism with the right properties for that job.
 
 | Implementation       | Language    | Status     | References                                                                                                                                                                                       |
 |----------------------|-------------|------------|--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| Reference Keymaster  | TypeScript  | Production | [`@didcid/keymaster`](https://www.npmjs.com/package/@didcid/keymaster) and the broader `@didcid/*` family of packages.                                                                           |
-| Native Keymaster     | Python      | In review  | [archetech/archon#455](https://github.com/archetech/archon/pull/455), [#480](https://github.com/archetech/archon/pull/480), [#483](https://github.com/archetech/archon/pull/483)                  |
-| Native Gatekeeper    | Rust        | In review  | [archetech/archon#404](https://github.com/archetech/archon/pull/404), [#425](https://github.com/archetech/archon/pull/425)                                                                       |
-
-The TypeScript stack is the canonical implementation that ships in current
-Archon nodes. The Python and Rust implementations target operator-friendly
-deployment profiles (Python for AI-agent integrations, Rust for
-performance-sensitive node operators) and are tracked by the PRs above.
+| Reference Keymaster  | TypeScript  | Production | [`@didcid/keymaster`](https://www.npmjs.com/package/@didcid/keymaster) and the broader `@didcid/*` family of packages. |
+| Native Keymaster     | Python      | Production | [github.com/archetech/archon/python](https://github.com/archetech/archon/tree/main/python)                  |
+| Native Gatekeeper    | Rust        | In review  | [github.com/archetech/archon/rust](https://github.com/archetech/archon/tree/main/rust/services/gatekeeper) |
 
 ## References
 
